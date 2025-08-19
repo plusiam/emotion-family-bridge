@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>감정→가족 브릿지 프로젝트북 (10차시)</title>
+  <style>
+    /* ============ 기본 / 색상 ============ */
+    :root {
+      --ink: #333;
+      --bg: #ffffff;
+      --paper-shadow: rgba(0,0,0,0.08);
+      --pri: #5B4E8C;
+      --pri-2: #7B6BA8;
+      --acc-1: #FFB84D;
+      --acc-2: #4CAF50;
+      --line: #E0E0E0;
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0;
+      padding: 0;
+    }
+    
+    html, body { 
+      height: 100%; 
+    }
+    
+    body { 
+      font-family: 'Malgun Gothic', '맑은 고딕', system-ui, -apple-system, sans-serif; 
+      color: var(--ink); 
+      background: #e9e9ee; 
+      line-height: 1.6; 
+    }
+
+    /* ============ 인쇄 ============ */
+    @page { 
+      size: A4 portrait; 
+      margin: 10mm; 
+    }
+    
+    @media print {
+      body { background: #fff; }
+      .no-print, .fab { display: none !important; }
+      .page { 
+        width: auto !important; 
+        min-height: auto !important; 
+        height: auto !important; 
+        padding: 8mm; 
+        margin: 0; 
+        box-shadow: none !important; 
+        page-break-after: always; 
+      }
+      .page:last-child { page-break-after: avoid; }
+      input, textarea { 
+        border: none !important; 
+        box-shadow: none !important; 
+      }
+    }
+
+    /* ============ 페이지 레이아웃 ============ */
+    .page { 
+      width: 210mm; 
+      min-height: 297mm; 
+      margin: 16px auto; 
+      padding: 20mm; 
+      background: var(--bg); 
+      box-shadow: 0 6px 24px var(--paper-shadow); 
+      border-radius: 8px; 
+    }
+    
+    @media (max-width: 768px) {
+      .page { 
+        width: 100%; 
+        min-height: auto; 
+        padding: 16px; 
+        margin: 12px auto; 
+        border-radius: 0; 
+      }
+    }
+
+    /* ============ 표지 ============ */
+    .cover { 
+      height: calc(297mm - 40mm); 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      text-align: center; 
+    }
+    
+    .cover .emoji { 
+      font-size: 72pt; 
+      margin: 8mm 0 2mm; 
+    }
+    
+    .cover h1 { 
+      font-size: 36pt; 
+      color: var(--pri); 
+      margin: 6mm 0 2mm; 
+    }
+    
+    .cover .subtitle { 
+      font-size: 16pt; 
+      color: var(--pri-2); 
+    }
+    
+    .cover .info-box { 
+      margin-top: 12mm; 
+      width: 100%; 
+      max-width: 140mm; 
+      background: #F8F6FF; 
+      border: 3px solid #9B8BC8; 
+      border-radius: 16px; 
+      padding: 14px 18px; 
+    }
+    
+    .info-row { 
+      display: grid; 
+      grid-template-columns: 110px 1fr; 
+      gap: 8px; 
+      align-items: center; 
+      margin: 6px 0; 
+    }
+    
+    .info-row label { 
+      text-align: right; 
+      font-weight: 700; 
+      color: #666; 
+    }
+    
+    .text { 
+      width: 100%; 
+      border: none; 
+      border-bottom: 2px solid #9B8BC8; 
+      padding: 6px 8px; 
+      background: transparent; 
+    }
+    
+    .text:focus { 
+      outline: 2px solid #c9bdf0; 
+      border-bottom-color: var(--pri); 
+    }
+
+    /* ============ 목차/진도 ============ */
+    .toc h2 { 
+      font-size: 24pt; 
+      color: var(--pri); 
+      text-align: center; 
+      margin-bottom: 14px; 
+      padding-bottom: 8px; 
+      border-bottom: 3px solid #9B8BC8; 
+    }
+    
+    .toc-list { 
+      display: grid; 
+      grid-template-columns: 1fr auto; 
+      gap: 6px 10px; 
+      font-size: 11pt; 
+    }
+    
+    .progress-check { 
+      margin-top: 18px; 
+    }
+    
+    .progress-grid { 
+      display: grid; 
+      grid-template-columns: repeat(10, 1fr); 
+      gap: 10px; 
+      margin: 12px 0; 
+    }
+    
+    .puck { 
+      aspect-ratio: 1; 
+      border: 2px solid #9B8BC8; 
+      border-radius: 50%; 
+      display: grid; 
+      place-items: center; 
+      font-weight: 700; 
+      color: #9B8BC8; 
+      background: #fff; 
+      cursor: pointer; 
+      user-select: none; 
+    }
+    
+    .puck.done { 
+      background: #9B8BC8; 
+      color: #fff; 
+    }
+
+    /* ============ 가이드/팁 ============ */
+    .guide h2 { 
+      font-size: 20pt; 
+      color: var(--pri); 
+      margin-bottom: 12px; 
+    }
+    
+    .guide h3 { 
+      font-size: 14pt; 
+      color: var(--pri-2); 
+      margin: 14px 0 8px; 
+    }
+    
+    .tip { 
+      background: #FFF9E6; 
+      border-left: 4px solid var(--acc-1); 
+      padding: 12px; 
+      border-radius: 6px; 
+      margin: 10px 0;
+    }
+
+    /* ============ 워크시트 공통 ============ */
+    .ws-header { 
+      background: linear-gradient(135deg, #F0E6FF 0%, #E6F3FF 100%); 
+      padding: 12px; 
+      border-radius: 12px; 
+      margin-bottom: 14px; 
+    }
+    
+    .ws-header h2 { 
+      font-size: 18pt; 
+      text-align: center; 
+      color: var(--pri); 
+      margin: 4px 0 10px; 
+    }
+    
+    .grid3 { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 12px; 
+    }
+    
+    @media (max-width: 768px) {
+      .grid3 { 
+        grid-template-columns: 1fr; 
+      }
+    }
+    
+    .grid3 .field { 
+      display: grid; 
+      grid-template-columns: auto 1fr; 
+      gap: 6px; 
+      align-items: center; 
+    }
+    
+    .label { 
+      font-weight: 700; 
+      color: #666; 
+    }
+
+    .section { 
+      margin: 16px 0; 
+      padding: 14px; 
+      border-radius: 12px; 
+    }
+    
+    .s1 { background: #FFF9F0; }
+    .s2 { background: #F0F9FF; }
+    .s3 { background: #F0FFF5; }
+    .s4 { background: #FFF0F9; }
+    .s5 { background: #FFF0F0; }
+    
+    .section h3 { 
+      color: var(--pri); 
+      margin-bottom: 10px; 
+      font-size: 14pt; 
+    }
+
+    .weather-grid { 
+      display: grid; 
+      grid-template-columns: repeat(6, 1fr); 
+      gap: 8px; 
+      margin: 10px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .weather-grid { 
+        grid-template-columns: repeat(3, 1fr); 
+      }
+    }
+    
+    .weather-item { 
+      text-align: center; 
+      padding: 8px 6px; 
+      border: 2px solid var(--line); 
+      border-radius: 8px; 
+      background: #fff; 
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .weather-item:hover {
+      background: #fef3c7;
+      border-color: #f59e0b;
+    }
+    
+    .weather-item .emoji { 
+      display: block; 
+      font-size: 20pt; 
+    }
+    
+    .weather-item .caption { 
+      font-size: 9pt; 
+      margin-top: 3px; 
+    }
+
+    .scale { 
+      display: flex; 
+      gap: 6px; 
+      margin: 10px 0;
+    }
+    
+    .box { 
+      width: 30px; 
+      height: 30px; 
+      border: 2px solid #ccc; 
+      border-radius: 6px; 
+      display: grid; 
+      place-items: center; 
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .box.filled {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-color: #f59e0b;
+    }
+
+    .check-grid { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 8px; 
+      margin: 10px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .check-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+      }
+    }
+    
+    .check { 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      background: #fff; 
+      border-radius: 6px; 
+      padding: 6px; 
+      cursor: pointer;
+    }
+    
+    .check:hover {
+      background: #f0f0f0;
+    }
+
+    .fill { 
+      width: 200px; 
+      border: none; 
+      border-bottom: 2px solid #9B8BC8; 
+      background: transparent; 
+      padding: 3px 4px; 
+    }
+    
+    .fill:focus { 
+      outline: 2px solid #c9bdf0; 
+    }
+
+    .homebox { 
+      border: 2px solid var(--acc-1); 
+      border-radius: 10px; 
+      background: #FFF9E6; 
+      padding: 12px; 
+    }
+    
+    .q { 
+      width: 100%; 
+      min-height: 42px; 
+      resize: vertical; 
+      border: none; 
+      background: transparent; 
+      border-bottom: 2px dashed #e5c07b; 
+      padding: 6px; 
+    }
+
+    /* ============ 감정 사전 ============ */
+    .dict { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 16px; 
+    }
+    
+    @media (max-width: 768px) {
+      .dict { 
+        grid-template-columns: 1fr; 
+      }
+    }
+    
+    .dict-cat { 
+      background: #F8F8F8; 
+      padding: 12px; 
+      border-radius: 10px; 
+    }
+    
+    .dict-cat h4 { 
+      color: var(--pri); 
+      margin-bottom: 6px; 
+    }
+    
+    .chips { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 8px; 
+    }
+    
+    .chip { 
+      background: #fff; 
+      border: 1px solid var(--line); 
+      border-radius: 20px; 
+      padding: 4px 10px; 
+      font-size: 10pt; 
+    }
+
+    /* ============ 성장 기록 ============ */
+    .record { 
+      background: #F0F9FF; 
+      padding: 16px; 
+      border-radius: 10px; 
+    }
+    
+    .rec-item { 
+      background: #fff; 
+      border-radius: 6px; 
+      padding: 8px; 
+      margin: 8px 0; 
+    }
+    
+    .rec-item .ttl { 
+      font-weight: 700; 
+      color: var(--pri-2); 
+      margin-bottom: 4px; 
+    }
+    
+    .rec-textarea {
+      width: 100%;
+      min-height: 60px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 8px;
+      resize: vertical;
+    }
+
+    .family-promise { 
+      margin-top: 22px; 
+      padding: 24px; 
+      background: linear-gradient(135deg, #F0E6FF 0%, #E6F3FF 100%); 
+      border-radius: 14px; 
+      text-align: center; 
+    }
+
+    /* ============ 버튼 ============ */
+    .fab { 
+      position: fixed; 
+      right: 16px; 
+      bottom: 16px; 
+      display: grid; 
+      gap: 8px; 
+      z-index: 999; 
+    }
+    
+    .btn { 
+      border: none; 
+      background: var(--pri); 
+      color: #fff; 
+      padding: 10px 16px; 
+      border-radius: 999px; 
+      cursor: pointer; 
+      font-weight: 700; 
+      box-shadow: 0 4px 10px rgba(0,0,0,.15); 
+      transition: transform .15s ease, background .15s ease; 
+    }
+    
+    .btn:hover { 
+      transform: translateY(-2px); 
+      background: var(--pri-2); 
+    }
+    
+    .btn.green { background: var(--acc-2); }
+    .btn.orange { background: var(--acc-1); color: #5a3b00; }
+    .btn.grey { background: #777; }
+
+    /* 포커스 가시화 */
+    a:focus, button:focus, input:focus, textarea:focus { 
+      outline: 3px solid #aac4ff; 
+      outline-offset: 2px; 
+    }
+  </style>
+</head>
+<body>
+  <!-- 고정 버튼 -->
+  <div class="fab no-print">
+    <button class="btn green" id="btnPrint">🖨️ 인쇄</button>
+    <button class="btn" id="btnCert">🏆 인증서</button>
+    <button class="btn orange" id="btnShare">📣 공유카드</button>
+    <button class="btn grey" id="btnReset">♻️ 초기화</button>
+  </div>
+
+  <!-- 1: 표지 -->
+  <section class="page">
+    <div class="cover">
+      <div class="emoji">🌈 💝 🏠</div>
+      <h1>감정→가족 브릿지</h1>
+      <div class="subtitle">프로젝트북</div>
+      <div class="subtitle" style="font-size:14pt; margin-top: -10px;">마음을 나누고 이해하는 10주 여행</div>
+      
+      <div class="info-box">
+        <div class="info-row">
+          <label for="cover-name">이름</label>
+          <input id="cover-name" class="text" type="text" placeholder="이름을 입력하세요" />
+        </div>
+        <div class="info-row">
+          <label for="cover-class">학년/반</label>
+          <input id="cover-class" class="text" type="text" placeholder="예: 3학년 2반" />
+        </div>
+        <div class="info-row">
+          <label for="cover-start">시작 날짜</label>
+          <input id="cover-start" class="text" type="date" />
+        </div>
+        <div class="info-row">
+          <label for="cover-goal">목표</label>
+          <input id="cover-goal" class="text" type="text" placeholder="예: 서로의 마음을 듣는 법 배우기" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2: 목차 + 진도 -->
+  <section class="page">
+    <div class="toc">
+      <h2>📚 목차</h2>
+      <div class="toc-list">
+        <div>🎯 이 책을 사용하는 방법</div><div>3</div>
+        <div>📝 작성 예시 (상황별)</div><div>4</div>
+        <div>✏️ 예시 학습지 (작성 완료)</div><div>5</div>
+        <div>📝 1회차 학습지</div><div>6</div>
+        <div>📝 2회차 학습지</div><div>7</div>
+        <div>📝 3회차 학습지</div><div>8</div>
+        <div>📝 4회차 학습지</div><div>9</div>
+        <div>📝 5회차 학습지</div><div>10</div>
+        <div>📝 6회차 학습지</div><div>11</div>
+        <div>📝 7회차 학습지</div><div>12</div>
+        <div>📝 8회차 학습지</div><div>13</div>
+        <div>📝 9회차 학습지</div><div>14</div>
+        <div>📝 10회차 학습지</div><div>15</div>
+        <div>📖 감정 단어 사전</div><div>16</div>
+        <div>🌱 나의 성장 기록</div><div>17</div>
+        <div>💡 가족과 소통하는 팁</div><div>18</div>
+      </div>
+      <div class="progress-check">
+        <h3 style="color: var(--pri); text-align:center;">✅ 진도 체크</h3>
+        <div class="progress-grid" id="progressGrid"></div>
+        <p style="text-align:center; color:#666; font-size:10pt;">완료한 회차를 클릭해서 표시해요 🎨</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3: 사용 가이드 -->
+  <section class="page">
+    <div class="guide">
+      <h2>🎯 이 책을 사용하는 방법</h2>
+      
+      <h3>📌 매주 한 번씩 작성해요</h3>
+      <p>이 프로젝트북은 10주 동안 사용할 수 있어요. 매주 한 번씩, 가족과 있었던 특별한 일을 떠올리며 작성해보세요.</p>
+      
+      <h3>📌 이렇게 진행해요</h3>
+      <ul>
+        <li><strong>1단계:</strong> 그때 있었던 일을 짧게 제목으로 써요</li>
+        <li><strong>2단계:</strong> 내 마음 날씨와 느낌을 표현해요</li>
+        <li><strong>3단계:</strong> 내가 원했던 것이 무엇인지 생각해요</li>
+        <li><strong>4단계:</strong> 가족의 마음도 상상해봐요</li>
+        <li><strong>5단계:</strong> 마음을 전하는 말을 연습해요</li>
+        <li><strong>6단계:</strong> 집에서 가족과 대화해요</li>
+      </ul>
+      
+      <div class="tip">
+        <strong>💡 Tip!</strong> 처음에는 어려울 수 있어요. 하지만 매주 조금씩 연습하다 보면 가족의 마음을 이해하고 내 마음을 표현하는 것이 쉬워질 거예요!
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-1: 작성 예시 페이지 -->
+  <section class="page">
+    <div class="guide">
+      <h2>📝 작성 예시 - 이렇게 써보세요!</h2>
+      
+      <div style="background: #FFF0F9; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+        <h3 style="color: #D1486F; margin-bottom: 15px;">💝 상황: 엄마가 바빠서 같이 못 놀아줬을 때</h3>
+        
+        <div class="section s4" style="background: white;">
+          <h3>4. 마음을 전하는 말 연습 💬</h3>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ① "네가 <span style="background: #FFE4E1; padding: 2px 8px; border-radius: 4px; font-weight: bold;">바빠서/피곤해서</span> 그랬구나. 
+            그래서 나는 <span style="background: #E6E6FA; padding: 2px 8px; border-radius: 4px; font-weight: bold;">서운했어/외로웠어</span>."
+          </p>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ② "나는 <span style="background: #E0F2FF; padding: 2px 8px; border-radius: 4px; font-weight: bold;">엄마와 같이 놀 시간</span>이 필요했어."
+          </p>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ③ "우리가 할 수 있는 작은 약속은 <span style="background: #FFF5E5; padding: 2px 8px; border-radius: 4px; font-weight: bold;">저녁 후 15분 놀기</span>야."
+          </p>
+        </div>
+      </div>
+
+      <div style="background: #F0FFF5; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+        <h3 style="color: #4CAF50; margin-bottom: 15px;">💚 상황: 동생이 내 물건을 가져갔을 때</h3>
+        
+        <div class="section s4" style="background: white;">
+          <h3>4. 마음을 전하는 말 연습 💬</h3>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ① "네가 <span style="background: #FFE4E1; padding: 2px 8px; border-radius: 4px; font-weight: bold;">심심해서/같이 놀고 싶어서</span> 그랬구나. 
+            그래서 나는 <span style="background: #E6E6FA; padding: 2px 8px; border-radius: 4px; font-weight: bold;">화가 났어/놀랐어</span>."
+          </p>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ② "나는 <span style="background: #E0F2FF; padding: 2px 8px; border-radius: 4px; font-weight: bold;">먼저 물어봐 주는 것</span>이 필요했어."
+          </p>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ③ "우리가 할 수 있는 작은 약속은 <span style="background: #FFF5E5; padding: 2px 8px; border-radius: 4px; font-weight: bold;">물건 빌릴 때 먼저 물어보기</span>야."
+          </p>
+        </div>
+      </div>
+
+      <div style="background: #F0F9FF; padding: 20px; border-radius: 12px;">
+        <h3 style="color: #4A90E2; margin-bottom: 15px;">💙 상황: 아빠가 늦게 들어왔을 때</h3>
+        
+        <div class="section s4" style="background: white;">
+          <h3>4. 마음을 전하는 말 연습 💬</h3>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ① "네가 <span style="background: #FFE4E1; padding: 2px 8px; border-radius: 4px; font-weight: bold;">일이 많아서/회사가 바빠서</span> 그랬구나. 
+            그래서 나는 <span style="background: #E6E6FA; padding: 2px 8px; border-radius: 4px; font-weight: bold;">아쉬웠어/기다렸어</span>."
+          </p>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ② "나는 <span style="background: #E0F2FF; padding: 2px 8px; border-radius: 4px; font-weight: bold;">아빠와 함께하는 시간</span>이 필요했어."
+          </p>
+          
+          <p style="font-size: 11pt; line-height: 2;">
+            ③ "우리가 할 수 있는 작은 약속은 <span style="background: #FFF5E5; padding: 2px 8px; border-radius: 4px; font-weight: bold;">주말에는 꼭 같이 놀기</span>야."
+          </p>
+        </div>
+      </div>
+
+      <div class="tip" style="margin-top: 20px; background: #FFFACD; border-left-color: #FFB84D;">
+        <strong>✨ 기억해요!</strong>
+        <ul style="margin-top: 10px;">
+          <li>예시를 참고해서 <strong>나만의 상황</strong>으로 바꿔 써보세요</li>
+          <li>정답은 없어요. <strong>내 마음</strong>을 솔직하게 표현하면 돼요</li>
+          <li>가족도 <strong>나름의 이유</strong>가 있었을 거예요</li>
+          <li>작은 약속이라도 <strong>함께 지키는 것</strong>이 중요해요</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 워크시트 컨테이너 -->
+  <div id="worksheets"></div>
+
+  <!-- 14: 감정 단어 사전 -->
+  <section class="page">
+    <h2 style="text-align: center; color: var(--pri); margin-bottom: 20px;">📖 감정 단어 사전</h2>
+    
+    <div class="dict">
+      <div class="dict-cat">
+        <h4>😊 기쁠 때</h4>
+        <div class="chips">
+          <span class="chip">행복해요</span>
+          <span class="chip">신나요</span>
+          <span class="chip">즐거워요</span>
+          <span class="chip">뿌듯해요</span>
+          <span class="chip">감사해요</span>
+          <span class="chip">설레요</span>
+        </div>
+      </div>
+      
+      <div class="dict-cat">
+        <h4>😢 슬플 때</h4>
+        <div class="chips">
+          <span class="chip">서운해요</span>
+          <span class="chip">외로워요</span>
+          <span class="chip">그리워요</span>
+          <span class="chip">실망했어요</span>
+          <span class="chip">속상해요</span>
+          <span class="chip">아쉬워요</span>
+        </div>
+      </div>
+      
+      <div class="dict-cat">
+        <h4>😠 화날 때</h4>
+        <div class="chips">
+          <span class="chip">짜증나요</span>
+          <span class="chip">억울해요</span>
+          <span class="chip">답답해요</span>
+          <span class="chip">분해요</span>
+          <span class="chip">불편해요</span>
+          <span class="chip">화나요</span>
+        </div>
+      </div>
+      
+      <div class="dict-cat">
+        <h4>😰 무서울 때</h4>
+        <div class="chips">
+          <span class="chip">걱정돼요</span>
+          <span class="chip">불안해요</span>
+          <span class="chip">긴장돼요</span>
+          <span class="chip">두려워요</span>
+          <span class="chip">떨려요</span>
+          <span class="chip">무서워요</span>
+        </div>
+      </div>
+    </div>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #F0F9FF; border-radius: 10px;">
+      <h3 style="color: var(--pri); margin-bottom: 15px;">💬 문장 만들기 도우미</h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+        <div>
+          <strong style="color: var(--pri-2);">가족이 왜 그랬을까? (생각)</strong>
+          <ul style="margin: 10px 0; padding-left: 20px; font-size: 10pt;">
+            <li>바빠서 / 피곤해서</li>
+            <li>걱정돼서 / 무서워서</li>
+            <li>도와주고 싶어서</li>
+            <li>같이 하고 싶어서</li>
+            <li>나를 지키려고</li>
+          </ul>
+        </div>
+        
+        <div>
+          <strong style="color: var(--pri-2);">우리가 할 수 있는 약속</strong>
+          <ul style="margin: 10px 0; padding-left: 20px; font-size: 10pt;">
+            <li>매일 5분 대화하기</li>
+            <li>한 번 더 물어보기</li>
+            <li>끝까지 들어주기</li>
+            <li>일주일에 한 번 놀기</li>
+            <li>서로 고맙다고 말하기</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15: 나의 성장 기록 -->
+  <section class="page">
+    <h2 style="text-align: center; color: var(--pri); margin-bottom: 20px;">🌱 나의 성장 기록</h2>
+    
+    <div class="record">
+      <h3>✨ 10주 동안 나는...</h3>
+      
+      <div class="rec-item">
+        <div class="ttl">가장 기억에 남는 순간</div>
+        <textarea class="rec-textarea" placeholder="어떤 순간이 가장 기억에 남나요?"></textarea>
+      </div>
+      
+      <div class="rec-item">
+        <div class="ttl">새롭게 알게 된 가족의 마음</div>
+        <textarea class="rec-textarea" placeholder="가족에 대해 새롭게 알게 된 것은?"></textarea>
+      </div>
+      
+      <div class="rec-item">
+        <div class="ttl">내가 가장 많이 느낀 감정</div>
+        <textarea class="rec-textarea" placeholder="어떤 감정을 가장 많이 느꼈나요?"></textarea>
+      </div>
+      
+      <div class="rec-item">
+        <div class="ttl">내가 성장했다고 느낀 점</div>
+        <textarea class="rec-textarea" placeholder="어떤 점에서 성장했다고 느끼나요?"></textarea>
+      </div>
+    </div>
+    
+    <div style="margin-top: 30px; text-align: center;">
+      <div style="display: inline-block; padding: 20px 40px; border: 3px solid var(--acc-1); border-radius: 15px; background: #FFF9E6;">
+        <h3 style="color: #FF8C00; margin-bottom: 10px;">🏆 나에게 주는 상</h3>
+        <p style="font-size: 14pt; margin: 10px 0;">10주 동안 열심히 노력한</p>
+        <p style="font-size: 18pt; font-weight: bold; color: var(--pri);">
+          <input type="text" class="text" style="display: inline-block; width: 200px;" placeholder="내 이름"> 에게
+        </p>
+        <p style="font-size: 14pt; margin-top: 20px;">
+          "<input type="text" class="text" style="display: inline-block; width: 250px;" placeholder="예: 최고의 감정 탐험가"> 상"을 드립니다!
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16: 가족과 소통하는 팁 -->
+  <section class="page">
+    <h2 style="text-align: center; color: var(--pri); margin-bottom: 20px;">💡 가족과 소통하는 팁</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+      <div style="background: #FFF0F5; padding: 20px; border-radius: 10px;">
+        <h3 style="color: #D1486F; margin-bottom: 15px;">❤️ 마음을 여는 말</h3>
+        <ul style="padding-left: 20px; line-height: 2;">
+          <li>"오늘 어떤 일이 있었어?"</li>
+          <li>"네 생각은 어때?"</li>
+          <li>"더 듣고 싶어"</li>
+          <li>"네 마음을 알고 싶어"</li>
+          <li>"함께 해결해보자"</li>
+        </ul>
+      </div>
+      
+      <div style="background: #F0F9FF; padding: 20px; border-radius: 10px;">
+        <h3 style="color: #4A90E2; margin-bottom: 15px;">👂 잘 듣는 방법</h3>
+        <ul style="padding-left: 20px; line-height: 2;">
+          <li>눈을 보며 들어요</li>
+          <li>고개를 끄덕여요</li>
+          <li>중간에 끊지 않아요</li>
+          <li>"그랬구나"라고 말해요</li>
+          <li>다시 한번 물어봐요</li>
+        </ul>
+      </div>
+      
+      <div style="background: #F0FFF5; padding: 20px; border-radius: 10px;">
+        <h3 style="color: #4CAF50; margin-bottom: 15px;">🤝 화해하는 방법</h3>
+        <ul style="padding-left: 20px; line-height: 2;">
+          <li>먼저 "미안해"라고 말해요</li>
+          <li>상대방의 마음을 이해해요</li>
+          <li>앞으로 어떻게 할지 약속해요</li>
+          <li>포옹을 해요</li>
+          <li>함께 즐거운 일을 해요</li>
+        </ul>
+      </div>
+      
+      <div style="background: #FFF9E6; padding: 20px; border-radius: 10px;">
+        <h3 style="color: var(--acc-1); margin-bottom: 15px;">✨ 감사 표현하기</h3>
+        <ul style="padding-left: 20px; line-height: 2;">
+          <li>"고마워"를 자주 말해요</li>
+          <li>편지를 써요</li>
+          <li>도와드려요</li>
+          <li>안아드려요</li>
+          <li>함께 시간을 보내요</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="family-promise">
+      <h3 style="color: var(--pri); margin-bottom: 20px;">🌈 우리 가족 약속</h3>
+      <div style="text-align: left; max-width: 500px; margin: 0 auto;">
+        <p style="margin: 15px 0;">
+          1. <input type="text" class="text" style="width: 90%;" placeholder="예: 매일 서로에게 감사 인사하기">
+        </p>
+        <p style="margin: 15px 0;">
+          2. <input type="text" class="text" style="width: 90%;" placeholder="예: 화날 때는 잠시 쉬고 대화하기">
+        </p>
+        <p style="margin: 15px 0;">
+          3. <input type="text" class="text" style="width: 90%;" placeholder="예: 일주일에 한 번 가족 놀이 시간 갖기">
+        </p>
+      </div>
+      <p style="margin-top: 30px; font-size: 14pt; color: var(--pri-2);">
+        💝 우리 가족 모두 함께 지켜요! 💝
+      </p>
+    </div>
+  </section>
+
+  <script>
+    // 상수 정의
+    const DOC_KEY = 'emotion_bridge_data';
+    let wsCounter = 0;
+
+    // 유틸리티 함수
+    function wid(suffix) {
+      return `ws${wsCounter}_${suffix}`;
+    }
+
+    // 워크시트 섹션 생성
+    function wsSection(num) {
+      wsCounter = num;
+      return `
+        <section class="page">
+          <div class="ws-header">
+            <h2>📝 ${num}회차 학습지</h2>
+            <div class="grid3">
+              <div class="field">
+                <label>날짜</label>
+                <input type="date" class="text" id="${wid('date')}">
+              </div>
+              <div class="field">
+                <label>요일</label>
+                <input type="text" class="text" id="${wid('day')}" placeholder="____요일">
+              </div>
+              <div class="field">
+                <label>제목</label>
+                <input type="text" class="text" id="${wid('title')}" placeholder="그때 있었던 일">
+              </div>
+            </div>
+          </div>
+
+          <div class="section s1">
+            <h3>1. 그때 내 마음 날씨 고르기 ☁️</h3>
+            <div class="weather-grid">
+              <label class="weather-item">
+                <input type="radio" name="${wid('weather')}" value="sunny">
+                <span class="emoji">☀️</span>
+                <span class="caption">맑음</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" name="${wid('weather')}" value="cloudy">
+                <span class="emoji">⛅</span>
+                <span class="caption">구름</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" name="${wid('weather')}" value="rainy">
+                <span class="emoji">🌧️</span>
+                <span class="caption">비</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" name="${wid('weather')}" value="stormy">
+                <span class="emoji">⛈️</span>
+                <span class="caption">번개</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" name="${wid('weather')}" value="rainbow">
+                <span class="emoji">🌈</span>
+                <span class="caption">무지개</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" name="${wid('weather')}" value="foggy">
+                <span class="emoji">🌫️</span>
+                <span class="caption">안개</span>
+              </label>
+            </div>
+            
+            <p><strong>느낌 세기 (1~5):</strong></p>
+            <div class="scale" data-ws="${num}">
+              <div class="box" data-level="1">1</div>
+              <div class="box" data-level="2">2</div>
+              <div class="box" data-level="3">3</div>
+              <div class="box" data-level="4">4</div>
+              <div class="box" data-level="5">5</div>
+            </div>
+            
+            <p><strong>몸의 신호:</strong></p>
+            <div class="check-grid">
+              <label class="check">
+                <input type="checkbox" id="${wid('body1')}">
+                <span>😢 눈물이 나요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('body2')}">
+                <span>😊 얼굴이 빨개져요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('body3')}">
+                <span>😣 어깨가 딱딱해요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('body4')}">
+                <span>🤢 배가 아파요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('body5')}">
+                <span>😄 웃음이 나요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('body6')}">
+                <span>💓 심장이 콩닥거려요</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="section s2">
+            <h3>2. 그때 내가 원했던 것 🌟</h3>
+            <div class="check-grid">
+              <label class="check">
+                <input type="checkbox" id="${wid('need1')}">
+                <span>💤 휴식</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('need2')}">
+                <span>👍 칭찬/인정</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('need3')}">
+                <span>🤝 함께함</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('need4')}">
+                <span>👀 관심</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('need5')}">
+                <span>🎈 자유</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('need6')}">
+                <span>💬 존중</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('need7')}">
+                <span>🙋 도움</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('need8')}">
+                <span>🕒 시간</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="${wid('need9')}">
+                <span>🛡️ 안전</span>
+              </label>
+            </div>
+            <p>"나는 사실 <input class="fill" id="${wid('actually')}" placeholder="____"> 가(이) 필요했어요."</p>
+          </div>
+
+          <div class="section s3">
+            <h3>3. 가족 마음 상상하기 👨‍👩‍👧‍👦</h3>
+            <p><strong>누구:</strong> <input type="text" class="fill" id="${wid('who')}" placeholder="예: 엄마"></p>
+            <p><strong>그 사람의 마음 날씨:</strong></p>
+            <div style="display: flex; gap: 15px; margin: 10px 0; flex-wrap: wrap;">
+              <label><input type="radio" name="${wid('fweather')}" value="sunny"> ☀️ 맑음</label>
+              <label><input type="radio" name="${wid('fweather')}" value="cloudy"> ⛅ 구름</label>
+              <label><input type="radio" name="${wid('fweather')}" value="rainy"> 🌧️ 비</label>
+              <label><input type="radio" name="${wid('fweather')}" value="stormy"> ⛈️ 번개</label>
+              <label><input type="radio" name="${wid('fweather')}" value="rainbow"> 🌈 무지개</label>
+              <label><input type="radio" name="${wid('fweather')}" value="foggy"> 🌫️ 안개</label>
+            </div>
+            <p><strong>왜 그렇게 생각했나요?</strong></p>
+            <input type="text" class="text" style="width: 100%;" id="${wid('why')}" placeholder="가족의 마음을 상상해보세요...">
+          </div>
+
+          <div class="section s4">
+            <h3>4. 마음을 전하는 말 연습 💬</h3>
+            
+            <div class="tip" style="background:#F3E5FF; border-left-color:#9B8BC8;">
+              <p style="font-size:10pt; color:#7B6BA8; margin:0 0 6px;"><strong>예시를 참고해서 써보세요!</strong></p>
+              <div style="font-size:9pt; color:#666; line-height:1.6;">
+                <p>• 엄마가 <strong style="color:#9B8BC8;">바빠서/피곤해서/걱정돼서</strong> 그랬구나</p>
+                <p>• 동생이 <strong style="color:#9B8BC8;">심심해서/같이 놀고 싶어서/부러워서</strong> 그랬구나</p>
+                <p>• 그래서 나는 <strong style="color:#E88BC8;">서운했어/화가 났어/외로웠어</strong></p>
+              </div>
+            </div>
+            
+            <p>① "네가 <input class="fill" id="${wid('say1a')}" placeholder="예: 피곤해서"> 그랬구나. 그래서 나는 <input class="fill" id="${wid('say1b')}" placeholder="예: 서운했어">."</p>
+            
+            <div class="tip" style="background:#E5F3FF; border-left-color:#4A90E2; margin:8px 0; font-size:9pt; color:#4A90E2;">
+              <strong>예:</strong> 관심 / 도움 / 시간 / 칭찬 / 함께 놀기
+            </div>
+            
+            <p>② "나는 <input class="fill" id="${wid('say2')}" placeholder="예: 함께 놀 시간"> 이 필요했어."</p>
+            
+            <div class="tip" style="background:#FFF5E5; border-left-color:#FF8C00; margin:8px 0; font-size:9pt; color:#FF8C00;">
+              <strong>예:</strong> 매일 10분 놀기 / 혼자 있을 시간 정하기 / 말할 때 끝까지 듣기
+            </div>
+            
+            <p>③ "우리가 할 수 있는 작은 약속은 <input class="fill" id="${wid('say3')}" placeholder="예: 저녁 후 15분 놀기"> 이야."</p>
+          </div>
+
+          <div class="section s5">
+            <h3>5. 집에서 해보기 🏠</h3>
+            <p><strong>오늘 밤 가족에게 물어볼 질문:</strong></p>
+            <div class="homebox">
+              <textarea class="q" id="${wid('homeq')}" placeholder="오늘 밤 가족에게 무엇을 물어보고 싶나요?"></textarea>
+            </div>
+            <div style="margin-top:10px; display:flex; gap:16px; flex-wrap:wrap;">
+              <label><input type="checkbox" id="${wid('asked')}"> 물어봤어요! ✅</label>
+              <label><input type="checkbox" id="${wid('later')}"> 다음에 할게요 ⏰</label>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    // 예시 워크시트 추가
+    function buildExampleWorksheet() {
+      return `
+        <section class="page">
+          <div class="ws-header">
+            <h2>📝 예시 학습지 - 이렇게 작성해요!</h2>
+            <div class="grid3">
+              <div class="field">
+                <label>날짜</label>
+                <input type="text" class="text" value="2025년 1월 16일" readonly style="background: #f0f0f0;">
+              </div>
+              <div class="field">
+                <label>요일</label>
+                <input type="text" class="text" value="목요일" readonly style="background: #f0f0f0;">
+              </div>
+              <div class="field">
+                <label>제목</label>
+                <input type="text" class="text" value="엄마가 바빠서 같이 못 놀아줬을 때" readonly style="background: #f0f0f0;">
+              </div>
+            </div>
+          </div>
+
+          <div class="section s1">
+            <h3>1. 그때 내 마음 날씨 고르기 ☁️</h3>
+            <div class="weather-grid">
+              <label class="weather-item">
+                <input type="radio" disabled>
+                <span class="emoji">☀️</span>
+                <span class="caption">맑음</span>
+              </label>
+              <label class="weather-item" style="background: #fef3c7; border-color: #f59e0b;">
+                <input type="radio" checked disabled>
+                <span class="emoji">⛅</span>
+                <span class="caption">구름</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" disabled>
+                <span class="emoji">🌧️</span>
+                <span class="caption">비</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" disabled>
+                <span class="emoji">⛈️</span>
+                <span class="caption">번개</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" disabled>
+                <span class="emoji">🌈</span>
+                <span class="caption">무지개</span>
+              </label>
+              <label class="weather-item">
+                <input type="radio" disabled>
+                <span class="emoji">🌫️</span>
+                <span class="caption">안개</span>
+              </label>
+            </div>
+            
+            <p><strong>느낌 세기 (1~5):</strong></p>
+            <div class="scale">
+              <div class="box filled">1</div>
+              <div class="box filled">2</div>
+              <div class="box filled">3</div>
+              <div class="box">4</div>
+              <div class="box">5</div>
+            </div>
+            
+            <p><strong>몸의 신호:</strong></p>
+            <div class="check-grid">
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>😢 눈물이 나요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" checked disabled>
+                <span>😊 얼굴이 빨개져요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>😣 어깨가 딱딱해요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>🤢 배가 아파요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>😄 웃음이 나요</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" checked disabled>
+                <span>💓 심장이 콩닥거려요</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="section s2">
+            <h3>2. 그때 내가 원했던 것 🌟</h3>
+            <div class="check-grid">
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>💤 휴식</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>👍 칭찬/인정</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" checked disabled>
+                <span>🤝 함께함</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" checked disabled>
+                <span>👀 관심</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>🎈 자유</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>💬 존중</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>🙋 도움</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" checked disabled>
+                <span>🕒 시간</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" disabled>
+                <span>🛡️ 안전</span>
+              </label>
+            </div>
+            <p>"나는 사실 <input class="fill" value="엄마와 놀 시간" readonly style="background: #E0F2FF;"> 가(이) 필요했어요."</p>
+          </div>
+
+          <div class="section s3">
+            <h3>3. 가족 마음 상상하기 👨‍👩‍👧‍👦</h3>
+            <p><strong>누구:</strong> <input type="text" class="fill" value="엄마" readonly style="background: #f0f0f0;"></p>
+            <p><strong>그 사람의 마음 날씨:</strong></p>
+            <div style="display: flex; gap: 15px; margin: 10px 0; flex-wrap: wrap;">
+              <label><input type="radio" disabled> ☀️ 맑음</label>
+              <label><input type="radio" disabled> ⛅ 구름</label>
+              <label><input type="radio" checked disabled> 🌧️ 비</label>
+              <label><input type="radio" disabled> ⛈️ 번개</label>
+              <label><input type="radio" disabled> 🌈 무지개</label>
+              <label><input type="radio" disabled> 🌫️ 안개</label>
+            </div>
+            <p><strong>왜 그렇게 생각했나요?</strong></p>
+            <input type="text" class="text" style="width: 100%;" value="엄마도 일이 많아서 힘들고 피곤했을 것 같아요" readonly style="background: #f0f0f0;">
+          </div>
+
+          <div class="section s4">
+            <h3>4. 마음을 전하는 말 연습 💬</h3>
+            
+            <div class="tip" style="background:#F3E5FF; border-left-color:#9B8BC8;">
+              <p style="font-size:10pt; color:#7B6BA8; margin:0 0 6px;"><strong>💡 이렇게 써봤어요!</strong></p>
+            </div>
+            
+            <p>① "네가 <input class="fill" value="바빠서" readonly style="background: #FFE4E1;"> 그랬구나. 그래서 나는 <input class="fill" value="서운했어" readonly style="background: #E6E6FA;">."</p>
+            
+            <p>② "나는 <input class="fill" value="엄마와 같이 놀 시간" readonly style="background: #E0F2FF;"> 이 필요했어."</p>
+            
+            <p>③ "우리가 할 수 있는 작은 약속은 <input class="fill" value="저녁 후 15분 놀기" readonly style="background: #FFF5E5;"> 이야."</p>
+          </div>
+
+          <div class="section s5">
+            <h3>5. 집에서 해보기 🏠</h3>
+            <p><strong>오늘 밤 가족에게 물어볼 질문:</strong></p>
+            <div class="homebox">
+              <textarea class="q" readonly style="background: #f0f0f0;">엄마, 오늘 일하면서 어떤 마음이었어요? 힘들었어요?</textarea>
+            </div>
+            <div style="margin-top:10px; display:flex; gap:16px; flex-wrap:wrap;">
+              <label><input type="checkbox" checked disabled> 물어봤어요! ✅</label>
+              <label><input type="checkbox" disabled> 다음에 할게요 ⏰</label>
+            </div>
+          </div>
+
+          <div class="tip" style="margin-top: 20px; background: #FFFACD; border-left-color: #FFB84D;">
+            <strong>🌟 선생님 말씀</strong>
+            <p style="margin-top: 10px;">이 예시처럼 작성하되, <strong>여러분만의 이야기</strong>로 바꿔 써보세요! 정답은 없어요. 솔직한 마음이 가장 중요해요.</p>
+          </div>
+        </section>
+      `;
+    }
+
+    // 워크시트 생성 수정
+    function buildWorksheets() {
+      const host = document.getElementById('worksheets');
+      let html = '';
+      
+      // 예시 워크시트 추가
+      html += buildExampleWorksheet();
+      
+      // 1-10회차 워크시트
+      for (let i = 1; i <= 10; i++) {
+        html += wsSection(i);
+      }
+      host.innerHTML = html;
+      
+      // 감정 세기 이벤트 바인딩
+      document.querySelectorAll('.scale').forEach(scale => {
+        const boxes = scale.querySelectorAll('.box');
+        boxes.forEach((box, index) => {
+          box.addEventListener('click', () => {
+            boxes.forEach((b, i) => {
+              if (i <= index) {
+                b.classList.add('filled');
+              } else {
+                b.classList.remove('filled');
+              }
+            });
+            saveAll();
+          });
+        });
+      });
+    }
+
+    // 진도 체크 생성
+    function buildProgress() {
+      const grid = document.getElementById('progressGrid');
+      for (let i = 1; i <= 10; i++) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'puck';
+        b.textContent = i;
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', () => {
+          b.classList.toggle('done');
+          b.setAttribute('aria-pressed', b.classList.contains('done') ? 'true' : 'false');
+          saveAll();
+        });
+        grid.appendChild(b);
+      }
+    }
+
+    // 저장 기능
+    function saveAll() {
+      const data = {};
+      
+      // 모든 input과 textarea 저장
+      document.querySelectorAll('input, textarea').forEach(el => {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          if (el.checked) {
+            data[el.id || el.name] = el.type === 'checkbox' ? true : el.value;
+          }
+        } else if (el.id) {
+          data[el.id] = el.value;
+        }
+      });
+      
+      // 진도 체크 저장
+      const progress = [];
+      document.querySelectorAll('.puck').forEach((p, i) => {
+        if (p.classList.contains('done')) {
+          progress.push(i + 1);
+        }
+      });
+      data.progress = progress;
+      
+      // 감정 세기 저장
+      document.querySelectorAll('.scale').forEach(scale => {
+        const ws = scale.dataset.ws;
+        if (ws) {
+          const filled = scale.querySelectorAll('.box.filled').length;
+          data[`ws${ws}_scale`] = filled;
+        }
+      });
+      
+      localStorage.setItem(DOC_KEY, JSON.stringify(data));
+    }
+
+    // 불러오기 기능
+    function loadAll() {
+      const raw = localStorage.getItem(DOC_KEY);
+      if (!raw) return;
+      
+      const data = JSON.parse(raw);
+      
+      // input과 textarea 복원
+      Object.keys(data).forEach(key => {
+        const el = document.getElementById(key);
+        if (el) {
+          if (el.type === 'checkbox') {
+            el.checked = data[key] === true;
+          } else if (el.type === 'radio') {
+            el.checked = true;
+          } else {
+            el.value = data[key];
+          }
+        }
+      });
+      
+      // radio 그룹 복원
+      document.querySelectorAll('input[type="radio"]').forEach(r => {
+        if (data[r.name] && r.value === data[r.name]) {
+          r.checked = true;
+        }
+      });
+      
+      // 진도 체크 복원
+      if (data.progress) {
+        const pucks = document.querySelectorAll('.puck');
+        data.progress.forEach(num => {
+          if (pucks[num - 1]) {
+            pucks[num - 1].classList.add('done');
+            pucks[num - 1].setAttribute('aria-pressed', 'true');
+          }
+        });
+      }
+      
+      // 감정 세기 복원
+      document.querySelectorAll('.scale').forEach(scale => {
+        const ws = scale.dataset.ws;
+        if (ws && data[`ws${ws}_scale`]) {
+          const boxes = scale.querySelectorAll('.box');
+          const filled = data[`ws${ws}_scale`];
+          boxes.forEach((box, i) => {
+            if (i < filled) {
+              box.classList.add('filled');
+            }
+          });
+        }
+      });
+    }
+
+    // 캔버스 다운로드
+    function downloadCanvas(canvas, fileName) {
+      if (canvas.toBlob) {
+        canvas.toBlob(blob => {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = fileName;
+          a.click();
+          URL.revokeObjectURL(a.href);
+        });
+      } else {
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = fileName;
+        a.click();
+      }
+    }
+
+    // 그라디언트 그리기
+    function drawGradientRect(ctx, w, h, c1, c2) {
+      const g = ctx.createLinearGradient(0, 0, w, h);
+      g.addColorStop(0, c1);
+      g.addColorStop(1, c2);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    // 인증서 생성
+    function generateCertificate() {
+      const name = (document.getElementById('cover-name')?.value || '친구').trim();
+      const cls = (document.getElementById('cover-class')?.value || '').trim();
+      const goal = (document.getElementById('cover-goal')?.value || '').trim();
+      const progressRate = Math.round((document.querySelectorAll('.puck.done').length / 10) * 100);
+      const date = new Date();
+
+      const W = 1200, H = 800;
+      const c = document.createElement('canvas');
+      c.width = W;
+      c.height = H;
+      const ctx = c.getContext('2d');
+      
+      drawGradientRect(ctx, W, H, '#667eea', '#764ba2');
+      
+      ctx.fillStyle = '#fff';
+      ctx.font = '48px Arial';
+      ctx.fillText('🏆 학습 완료 인증서', 60, 110);
+      ctx.font = '36px Arial';
+      ctx.fillText(`${name}${cls ? ' (' + cls + ')' : ''} 님`, 60, 200);
+      ctx.font = '28px Arial';
+      ctx.fillText('감정→가족 브릿지(10차시)를 성실히 완료하였습니다.', 60, 260);
+      ctx.fillText(`달성률: ${progressRate}%`, 60, 310);
+      if (goal) ctx.fillText(`학습 목표: ${goal}`, 60, 360);
+      ctx.font = '22px Arial';
+      ctx.fillText(`발급일: ${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`, 60, 410);
+
+      downloadCanvas(c, `인증서_${name}.png`);
+    }
+
+    // 공유카드 생성
+    function generateShareCard() {
+      const title = '감정→가족 브릿지';
+      const name = (document.getElementById('cover-name')?.value || '친구').trim();
+      const progress = document.querySelectorAll('.puck.done').length;
+      
+      const W = 1080, H = 1080;
+      const c = document.createElement('canvas');
+      c.width = W;
+      c.height = H;
+      const ctx = c.getContext('2d');
+      
+      drawGradientRect(ctx, W, H, '#f093fb', '#f5576c');
+      
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = '120px Arial';
+      ctx.fillText('🎉', W / 2, 260);
+      ctx.font = '56px Arial';
+      ctx.fillText(`${title} 완료 도전!`, W / 2, 380);
+      ctx.font = '42px Arial';
+      ctx.fillText(`${name} · 진행 ${progress}/10`, W / 2, 460);
+      ctx.font = '28px Arial';
+      ctx.fillText('#온라인학습 #성장 #가족대화', W / 2, 520);
+      
+      downloadCanvas(c, `공유카드_${name}.png`);
+    }
+
+    // 초기화
+    function resetAll() {
+      if (!confirm('모든 작성 내용을 초기화할까요?')) return;
+      localStorage.removeItem(DOC_KEY);
+      location.reload();
+    }
+
+    // 자동 저장
+    function wireAutosave() {
+      document.body.addEventListener('input', saveAll);
+      document.body.addEventListener('change', saveAll);
+      setInterval(saveAll, 15000); // 15초마다 자동 저장
+    }
+
+    // 초기화
+    document.addEventListener('DOMContentLoaded', () => {
+      // 워크시트 삽입 위치 생성
+      const worksheetContainer = document.createElement('div');
+      worksheetContainer.id = 'worksheets';
+      
+      // 사용 가이드 다음에 삽입
+      const guidePage = document.querySelectorAll('.page')[2];
+      if (guidePage && guidePage.nextSibling) {
+        guidePage.parentNode.insertBefore(worksheetContainer, guidePage.nextSibling);
+      }
+      
+      // 초기화
+      buildWorksheets();
+      buildProgress();
+      loadAll();
+      wireAutosave();
+      
+      // 버튼 이벤트
+      document.getElementById('btnPrint').addEventListener('click', () => window.print());
+      document.getElementById('btnCert').addEventListener('click', generateCertificate);
+      document.getElementById('btnShare').addEventListener('click', generateShareCard);
+      document.getElementById('btnReset').addEventListener('click', resetAll);
+    });
+  </script>
+</body>
+</html>
